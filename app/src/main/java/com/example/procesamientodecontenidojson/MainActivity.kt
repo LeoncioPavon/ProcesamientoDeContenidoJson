@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun clickbtnAdd(view: View){
-        val url = "http://192.168.1.67/MyUca/insertarCoord.php"
+        val url = "http://192.168.1.67/Metodos/insertarCoord.php"
         val q =  Volley.newRequestQueue(this)
         var resultPost = object : StringRequest(Request.Method.POST,url,
             Response.Listener<String>{ response ->
