@@ -6,59 +6,64 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.example.procesamientodecontenidojson.databinding.ActivityMainBinding
+import com.google.android.material.snackbar.Snackbar
+import org.json.JSONArray
+import org.json.JSONException
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var edName: EditText
-    private lateinit var edLastName: EditText
-    private lateinit var edFechaNac: EditText
-    private lateinit var edTitulo: EditText
-    private lateinit var edEmail: EditText
-    private lateinit var edFac: EditText
-    private lateinit var  btnAdd: Button
-
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var coordinatorLayout: CoordinatorLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        initView();
-    }
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-    private fun initView(){
-        edName = findViewById(R.id.edName)
-        edLastName = findViewById(R.id.edLastName)
-        edFechaNac = findViewById(R.id.edFechaNac)
-        edTitulo = findViewById(R.id.edTitulo)
-        edEmail = findViewById(R.id.edEmail)
-        edFac = findViewById(R.id.edFac)
-        btnAdd = findViewById(R.id.btnAdd)
-    }
+        coordinatorLayout = binding.coordinatorLayout
 
-    fun clickbtnAdd(view: View){
-        val url = "http://192.168.1.67/Metodos/insertarCoord.php"
-        val q =  Volley.newRequestQueue(this)
-        var resultPost = object : StringRequest(Request.Method.POST,url,
-            Response.Listener<String>{ response ->
-                Toast.makeText(this, "Registro insertado exitosamente", Toast.LENGTH_LONG).show()
-            }, Response.ErrorListener { error ->
-                Toast.makeText(this, "Error al insertar el registro", Toast.LENGTH_LONG).show()
-            }) {
-            override fun getParams(): MutableMap<String, String>{
-                val params = HashMap<String, String>()
-                params.put("nombres", edName.text.toString())
-                params.put("apellidos", edLastName.text.toString())
-                params.put("fechaNac", edFechaNac.text.toString())
-                params.put("titulo", edTitulo.text.toString())
-                params.put("email", edEmail.text.toString())
-                params.put("facultad", edFac.text.toString())
+        val requestQueue = Volley.newRequestQueue(this)
+        val url = "http://192.168.1.67/Metodos/mostrarCoord.php"
 
-                return params
-            }
-        }
-        q.add(resultPost)
+        val stringRequest = StringRequest(
+            Request.Method.GET, url,
+            { response ->
+                try {
+                    val jsonArray = JSONArray(response)
+                    val coordinadores = mutableListOf<coordinador>()
+
+                    for (i in 0 until jsonArray.length()) {
+                        val jsonObject = jsonArray.getJSONObject(i)
+                        val idC = jsonObject.getInt("idC")
+                        val nombres = jsonObject.getString("nombres")
+                        val apellidos = jsonObject.getString("apellidos")
+                        val fechaNac = jsonObject.getString("fechaNac")
+                        val titulo = jsonObject.getString("titulo")
+                        val email = jsonObject.getString("email")
+                        val facultad = jsonObject.getString("facultad")
+
+                        val data = coordinador(idC, nombres, apellidos, fechaNac, titulo, email, facultad)
+                        coordinadores.add(data)
+                    }
+
+                    binding.rcvCoord.adapter = DataAdapter(coordinadores)
+                    binding.rcvCoord.layoutManager = LinearLayoutManager(this)
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                    Snackbar.make(coordinatorLayout, "Error: ${e.message}", Snackbar.LENGTH_LONG).show()
+                }
+            },
+            { error ->
+                Snackbar.make(coordinatorLayout, "Error: ${error.message}", Snackbar.LENGTH_LONG).show()
+            })
+
+        requestQueue.add(stringRequest)
     }
 }
 
