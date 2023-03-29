@@ -1,7 +1,7 @@
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "GET"){
       require_once 'conexion.php' ;
-      $my_query = "select * from coordinador ";
+      $my_query = "select * from coordinador WHERE DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(), fechaNac)), '%Y')+0 >= 60";
       $result = $mysql->query($my_query);
       if ($mysql->affected_rows > 0) {
           $json = "{\"data\":[";
