@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 28, 2023 at 01:54 AM
+-- Generation Time: Mar 30, 2023 at 04:31 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -38,6 +38,18 @@ CREATE TABLE `coordinador` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
+-- Dumping data for table `coordinador`
+--
+
+INSERT INTO `coordinador` (`idC`, `nombres`, `apellidos`, `fechaNac`, `titulo`, `email`, `facultad`) VALUES
+(8, 'Leoncio', 'Pavon', '2003-04-03', 'Bachiller', 'Leonciox500@gmail.com', 'ISI'),
+(10, 'Yo', 'Soy', '2003-01-21', 'Ninguno', '@gmail.com', 'Isi'),
+(15, 'Yizark', 'Farrach', '2003-03-12', 'Bachi', 'yizi@gmail.com', 'lenguaje'),
+(16, 'Leoncio', 'Hernandez', '1962-03-12', 'Ingeniero', 'leoncio.her@gmail.com', 'ISI'),
+(17, 'José', 'Pavón', '1950-03-12', 'Psicologo', 'pavonjose@gmail.com', 'PSC'),
+(18, 'Jessenia', 'Larios', '1958-03-12', 'Abogada', 'Jessenialarios@gmail.com', 'Derecho');
+
+--
 -- Indexes for dumped tables
 --
 
@@ -55,7 +67,7 @@ ALTER TABLE `coordinador`
 -- AUTO_INCREMENT for table `coordinador`
 --
 ALTER TABLE `coordinador`
-  MODIFY `idC` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `idC` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
